@@ -3,14 +3,20 @@ on:
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write  # 這是關鍵！明確給予寫入權限
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # 強制使用 Node 24 消除警告
     steps:
-      # 將 v2 改為 v4
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} # 使用自動生成的 Token
       
-      # 將 v2 改為 v5
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -24,7 +30,7 @@ jobs:
         
       - name: Commit and push
         run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add data.json
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update ghibli news" && git push)
