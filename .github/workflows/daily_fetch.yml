@@ -7,18 +7,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      # 將 v2 改為 v4
+      - uses: actions/checkout@v4
+      
+      # 將 v2 改為 v5
       - name: Set up Python
-        uses: actions/setup-python@v2
-        with: {python-version: '3.9'}
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          
       - name: Install dependencies
-        run: pip install feedparser googletrans==4.0.0-rc1
+        run: pip install feedparser googletrans==4.0.0-rc1 legacy-cgi
+        
       - name: Fetch and Translate
         run: python fetch_data.py
+        
       - name: Commit and push
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
           git add data.json
-          git commit -m "Update ghibli news"
-          git push
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update ghibli news" && git push)
