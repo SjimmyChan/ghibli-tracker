@@ -1,0 +1,22 @@
+# 虛擬環境 (最重要，千萬不要上傳)
+venv/
+env/
+.venv/
+
+# Python 編譯後的檔案
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 系統產生的垃圾檔
+.DS_Store
+Thumbs.db
+
+# VSCode 設定檔 (可以選擇性忽略，建議忽略)
+.vscode/
+
+# 部署與測試環境
+.pytest_cache/
+.coverage
+htmlcov/
+.streamlit/

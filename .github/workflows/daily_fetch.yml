@@ -1,0 +1,24 @@
+name: Daily Fetch
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with: {python-version: '3.9'}
+      - name: Install dependencies
+        run: pip install feedparser googletrans==4.0.0-rc1
+      - name: Fetch and Translate
+        run: python fetch_data.py
+      - name: Commit and push
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add data.json
+          git commit -m "Update ghibli news"
+          git push
